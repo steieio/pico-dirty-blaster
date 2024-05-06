@@ -662,7 +662,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp a5f3dfbb-9ff9-4a22-8f6e-df0c16e2ae79)
     )
-    (fp_text value "TXB0104PW" (at 0 3.45) (layer "F.Fab")
+    (fp_text value "TXU0304PW" (at 0 3.45) (layer "F.Fab")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp b540f211-7115-4eb0-9c92-2a2136e77b89)
     )
