@@ -15,14 +15,16 @@ UF2_MAGIC_START1 = 0x9E5D5157 # Randomly selected
 UF2_MAGIC_END    = 0x0AB16F30 # Ditto
 
 jbchdraddr = 0x20000
+jbcspeed = 1000000
 familyid = 0x0
-jbcaction = b"PROGRAM"
+jbcaction = b""
 jbcfilename = b""
 jbcdescription = b""
 
 
 def convert_to_uf2(uf2_content, jbc_content):
-    global familyid
+    global jbchdraddr, familyid, jbcaction, jbcdescription, jbcfilename, jbcspeed
+
     datapadding = b""
     while len(datapadding) < 512 - 256 - 32 - 4:
         datapadding += b"\x00\x00\x00\x00"
@@ -57,7 +59,6 @@ def convert_to_uf2(uf2_content, jbc_content):
             assert False, "Invalid UF2 data size at " + ptr
         if datalen < 256:
             print("Short block at block #%d\n", hdi[5])
-        newaddr = hdi[3]
 
         hdo = struct.pack(b"<IIIIIIII", hdi[0], hdi[1], hdi[2], hdi[3], hdi[4], hdi[5], numblocks, hdi[7])
         outp.append(hdo)
@@ -109,8 +110,8 @@ def convert_to_uf2(uf2_content, jbc_content):
     print("Last Address (post padding): 0x{:04x}".format(lastaddr))
 
 # Create JUF2 Header Block
-    chunk = struct.pack(b"<IIII16s32s128s", 0x3246554A, 0, 
-          len(jbc_content), (jbchdraddr + 256), jbcaction.encode('utf-8'), 
+    chunk = struct.pack(b"<IIIIII16s32s128s", 0x3246554A, 0, 
+          len(jbc_content), (jbchdraddr + 256), jbcspeed, 0, jbcaction.encode('utf-8'), 
           jbcfilename.encode('utf-8'), jbcdescription.encode('utf-8')) 
 
     hdo = struct.pack(b"<IIIIIIII",
@@ -138,29 +139,6 @@ def convert_to_uf2(uf2_content, jbc_content):
 
     return b"".join(outp)
 
-class Block:
-    def __init__(self, addr):
-        self.addr = addr
-        self.bytes = bytearray(256)
-
-    def encode(self, blockno, numblocks):
-        global familyid
-        flags = 0x0
-        if familyid:
-            flags |= 0x2000
-        hd = struct.pack("<IIIIIIII",
-            UF2_MAGIC_START0, UF2_MAGIC_START1,
-            flags, self.addr, 256, blockno, numblocks, familyid)
-        hd += self.bytes[0:256]
-        while len(hd) < 512 - 4:
-            hd += b"\x00"
-        hd += struct.pack("<I", UF2_MAGIC_END)
-        return hd
-
-def to_str(b):
-    return b.decode("utf-8")
-
-
 def write_file(name, buf):
     with open(name, "wb") as f:
         f.write(buf)
@@ -172,7 +150,7 @@ def error(msg):
     sys.exit(1)
 
 def main():
-    global jbchdraddr, familyid, jbcaction, jbcdescription, jbcfilename
+    global jbchdraddr, familyid, jbcaction, jbcdescription, jbcfilename, jbcspeed
     parser = argparse.ArgumentParser(description='Convert to UF2 or flash directly.')
     parser.add_argument('-a', '--action', dest='action', type=str,
                         default="PROGRAM",
@@ -192,11 +170,12 @@ def main():
                         help='jbc input file')
     parser.add_argument('-o', '--output', metavar="FILE", dest='output', type=str,
                         help='write output to named file; defaults to "flash.uf2" or "flash.bin" where sensible')
-    parser.add_argument('-c', '--convert', action='store_true',
-                        help='do not flash, just convert')
+    parser.add_argument('-s', '--speed', dest='speed', type=str,
+                        help='set JTAG speed in Hz')
     parser.add_argument('-i', '--info', action='store_true',
                         help='display header information from UF2, do not convert')
     args = parser.parse_args()
+
     jbchdraddr = int(args.base, 0)
 
 #    families = load_families()
@@ -216,6 +195,9 @@ def main():
     if not args.output:
         error("Need output file")
 
+    if args.speed:
+        jbcspeed = int(args.speed, 0)
+
     if args.action:
         jbcaction = args.action
 
@@ -224,7 +206,6 @@ def main():
 
     outbuf = convert_to_uf2(uf2buf, jbcbuf)
     write_file(args.output, outbuf)
-
 
 
 if __name__ == "__main__":
