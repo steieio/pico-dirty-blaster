@@ -7,7 +7,7 @@ A USB Blaster alternative based on [PICO-DIRTYJTAG](https://github.com/phdussud/
 A [JBC player](./uf2jbc.md) is also available for these boards to allow programming devices from [JBC files](https://www.intel.com/content/www/us/en/programmable/quartushelp/current/index.htm#reference/glossary/def_jbc.htm).
 
 This project includes three PCB variants:
- * Through Hole
+ * Through Hole  [Order from OSH Park](https://oshpark.com/shared_projects/5RjXdQ8y)
  * Surface Mount
  * Level Shift
 

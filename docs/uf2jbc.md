@@ -1,6 +1,8 @@
 # JBC to UF2 Utility
 
-This tool converts an Altera JBC file into a UF2 file that can be loaded into a microcontroller to program an FPGA.  It takes an existing JBC player firmware file in UF2 format and adds the JBC data along with a header describing the JBC file to the player firmware.
+This tool enables Drag-n-Drop programming of an FPGA.  It converts an Altera JBC file into a UF2 file that can be loaded into a microcontroller to program an FPGA.  It takes an existing JBC player firmware file in UF2 format and adds the JBC data along with a header describing the JBC file to the player firmware.  
+
+To use the output file, connect the Raspberry Pi Pico board to the JTAG signals on the FPGA.  The [Pico-Dirty-Blaster project](https://github.com/steieio/pico-dirty-blaster) has several adapters to assist with these connections.  Next, hold down the BOOTSEL button while plugging in the Pico board to activate the flashloader.  When the drive appears on your computer, drag-n-drop the UF2 file onto the drive to transfer the image to the Pico board.  After the image is written to the Pico board, it will reboot and run the JBC player to load the FPGA with the JBC image you provided to the script.
 
 ## Generating a JBC File
 
