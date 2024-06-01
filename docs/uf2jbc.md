@@ -8,12 +8,12 @@ JBC is the STAPL JAM Byte Code format.  Quartus can generate these files.  In or
 
 To build get an uncompressed .jbc file:
 
- 1.  Go to Device \> Device and Pin Options \> Programming Files and select the "JEDEC STAPL Format File (.jam)" checkbox, or add '''set_global_assignment -name GENERATE_JAM_FILE ON''' to your Quartus project settings
- 2.  Run '''quartus_jbcc.exe -n <filename>.jam <filename>.jbc'''
+ 1.  Go to Device \> Device and Pin Options \> Programming Files and select the "JEDEC STAPL Format File (.jam)" checkbox, or add ```set_global_assignment -name GENERATE_JAM_FILE ON``` to your Quartus project settings
+ 2.  Run ```quartus_jbcc.exe -n <filename>.jam <filename>.jbc```
 
 ## Example
 
-'''python3 uf2jbc.py -u pico-jbi.uf2 -j blinky.jbc -b 0x10020000 -a "PROGRAM" -d "MAX10 Blinky" -o max10_blinky.uf2'''
+```python3 uf2jbc.py -u pico-jbi.uf2 -j blinky.jbc -b 0x10020000 -a "PROGRAM" -d "MAX10 Blinky" -o max10_blinky.uf2```
 
 ## Arguments
 
@@ -22,7 +22,7 @@ To build get an uncompressed .jbc file:
  * -b, --base \<JUF2 header address\>    Address of the JUF2 header
  * -a, --action \<Action String\>    String indcating action to perform \(Usually "PROGRAM")
  * -d, --description \<Description String\>    String describing the JBC image
- * -s, --speed \<TCK speed in Hz\>    TCK signal speed in Hertz \(To be implemented\)
+ * -s, --speed \<TCK speed in Hz\>    TCK signal speed in Hertz \(to be implemented\)
  * -o, --output \<output.uf2\>    Output filename
 
 ## JBC Player Implementations
