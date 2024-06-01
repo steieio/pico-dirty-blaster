@@ -4,6 +4,8 @@ A USB Blaster alternative based on [PICO-DIRTYJTAG](https://github.com/phdussud/
 
 ![Pico Dirty Blaster connected to MAX10 evaluation kit](max10m08e144-pico.jpg)
 
+A [JBC player](./uf2jbc.md) is also available for these boards to allow programming devices from [JBC files](https://www.intel.com/content/www/us/en/programmable/quartushelp/current/index.htm#reference/glossary/def_jbc.htm).
+
 This project includes three PCB variants:
  * Through Hole
  * Surface Mount
